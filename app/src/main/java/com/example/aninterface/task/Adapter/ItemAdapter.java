@@ -56,9 +56,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
         holder.date.setText(model.getOrderDate());
         Log.e("r", "main");
         holder.food.removeAllViews();
-        for (ItemModel.Product product : model.getProducts()) {
 
-            view = LayoutInflater.from(context).inflate(R.layout.sub_item, holder.food, false);
+            for (int i = 0; i < model.getProducts().size();i++){
+                ItemModel.Product product = model.getProducts().get(i);
+                view = LayoutInflater.from(context).inflate(R.layout.sub_item, holder.food, false);
             Log.e("r", "for");
             RatingBar ratingItem = view.findViewById(R.id.rating_item);
             final ProgressBar progressBar = view.findViewById(R.id.imageProgress);
@@ -85,6 +86,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
 
                 }
             });
+            if (i ==model.getProducts().size()-1){
+                View line = view.findViewById(R.id.line);
+                line.setVisibility(View.GONE);
+            }
             holder.food.addView(view);
         }
 
@@ -94,17 +99,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
     public int getItemCount() {
         return list != null ? list.size() : 0;
     }
-    public void setCallback(com.example.aninterface.task.Adapter.Callback callback){
-        this.callback=callback;
+
+    public void setCallback(com.example.aninterface.task.Adapter.Callback callback) {
+        this.callback = callback;
     }
+
     public void addlist(List<ItemModel.Result> newList) {
         list.addAll(newList);
         notifyItemRangeInserted(getItemCount(), newList.size() - 1);
     }
-    public void deleteItem(int position){
+
+    public void deleteItem(int position) {
         list.remove(position);
         notifyItemRemoved(position);
     }
+
     class ItemHolder extends RecyclerView.ViewHolder {
         private TextView delivered, proplem, date;
         private ImageView delete, place;
@@ -134,24 +143,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
                         i.putExtra("product", list.get(getAdapterPosition()).getProducts().get(0));
                         context.startActivity(i);
                     } else {
-                        final Snackbar snackbar = Snackbar.make(view, "No internet conecction", Snackbar.LENGTH_INDEFINITE);
-                        snackbar.setAction("Tray again", new View.OnClickListener() {
+                        final Snackbar snackbar = Snackbar.make(view, "No internet connection", Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction("try again", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 if (Network.isConeccted(context)) {
-                                    if (Network.isConeccted(context)) {
-                                        Intent i = new Intent(context, MapsActivity.class);
-                                        i.putExtra("result", list.get(getAdapterPosition()));
-                                        i.putExtra("product", list.get(getAdapterPosition()).getProducts().get(0));
-                                        context.startActivity(i);
-                                    }else {
-
-                                    }
+                                    Intent i = new Intent(context, MapsActivity.class);
+                                    i.putExtra("result", list.get(getAdapterPosition()));
+                                    i.putExtra("product", list.get(getAdapterPosition()).getProducts().get(0));
+                                    context.startActivity(i);
                                 }
-
                             }
-                        });
-                        snackbar.show();
+                        }).show();
                     }
 
                 }
@@ -159,7 +162,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    callback.onClick(view,getAdapterPosition());
+                    callback.onClick(view, getAdapterPosition());
                 }
             });
             proplem.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +171,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
                     sendProplem();
                 }
             });
+
         }
 
         private void sendProplem() {
