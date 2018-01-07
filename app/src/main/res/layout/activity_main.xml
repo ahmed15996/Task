@@ -24,6 +24,27 @@
         android:layout_marginBottom="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/recycler"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/noInternetForm"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="18sp"
+            android:text="No internet Connection" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tray again"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:id="@+id/noInternetBut"/>
+
+    </LinearLayout>
+
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
